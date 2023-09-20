@@ -7,7 +7,7 @@ const dataPromise = d3.json(url);
 var nameList = [];
 var metaDataList = [];
 var optionsData=[];
-var metaDataText ="";
+var selectedValue;
 
 //Fetch the JSON data and console log it
 //d3.json(url).then(function(data) {
@@ -46,10 +46,15 @@ dataPromise.then(function(data) {
      {
         let dropdownMenu = d3.select("#selDataset");
          // Assign the value of the dropdown menu option to a variable
-        let selectedValue = dropdownMenu.property("value");
-        console.log(selectedValue);
+        selectedId = dropdownMenu.property("value");
+        console.log(selectedId);
+        loadMetadata(selectedId);
+     }
 
         //Read and load the metadata for selected individual
+    function loadMetadata(selectedValue)
+     {
+        var metaDataText ="";
         metaDataList = data.metadata
         for (let cnt = 0; cnt < metaDataList.length; cnt ++)
         {
@@ -66,7 +71,7 @@ dataPromise.then(function(data) {
                  //console.log(metaDataText)                
                 d3.select("#sample-metadata").text(metaDataText);               
             }            
-        }        
+        }                
      }
 
 
