@@ -7,7 +7,7 @@ const dataPromise = d3.json(url);
 var nameList = [];
 var metaDataList = [];
 var optionsData=[];
-var selectedValue;
+//var selectedValue;
 
 //Fetch the JSON data and console log it
 //d3.json(url).then(function(data) {
@@ -18,15 +18,14 @@ dataPromise.then(function(data) {
   //console.log(data.samples[0].id);
 
 // Store the valus and text for dropdown in a list of dictionaries
-  optionsData = nameList.map(function(item,index)
+  optionsData = nameList.map(function(item)
   {
     return {'value':parseInt(item),'text': item }
   });
   //console.log(optionsData)
   
 
-  // Load the dropdown with list of ids from name list,
-
+  // Load the dropdown with list of ids from name list
   var selectTag = d3.select("select");
   var options = selectTag.selectAll('option').data(optionsData);
 
@@ -39,19 +38,19 @@ dataPromise.then(function(data) {
         return d.text;
       });
 
-      // Call updateData() when a change takes place to the DOM
+    // Call updateData() when a change takes place to the DOM
      d3.selectAll("#selDataset").on("change", updateData);
-
      function updateData()
      {
         let dropdownMenu = d3.select("#selDataset");
          // Assign the value of the dropdown menu option to a variable
-        selectedId = dropdownMenu.property("value");
+        let selectedId = dropdownMenu.property("value");
         console.log(selectedId);
         loadMetadata(selectedId);
+        plotBarchart(selectedId);
      }
 
-        //Read and load the metadata for selected individual
+    //Read and load the metadata for selected individual
     function loadMetadata(selectedValue)
      {
         var metaDataText ="";
@@ -74,13 +73,56 @@ dataPromise.then(function(data) {
         }                
      }
 
+    // Create the horizontal bar chart for selected individual - may be a function
+     function plotBarchart(selectedValue)
+     {
+        //Read the required data for the horizontal barchart
+        let sampleList = data.samples;
+        //console.log(sampleList);
+        for (let s =0; s < sampleList.length; s++ )
+        {
+            if(sampleList[s].id == selectedValue )
+            {
+                //console.log(sampleList[s]);
+                let selectedSampleList = sampleList[s];
+                //let sample_values = selectedSampleList.sample_values.slice(0,10).reverse();
+                //let otu_labels = selectedSampleList.otu_labels.slice(0,10).reverse();
+                let otu_ids = selectedSampleList.otu_ids.map(item=> "OTU " + item)                
+                 console.log(otu_ids);
 
-// Create the horizontal bar chart for selected individual - may be a function
+                // Data for Bar Graph
+                    let barData = [{
+                        x: selectedSampleList.sample_values.slice(0,10).reverse(),
+                        y: otu_ids.slice(0,10).reverse(),
+                        text: selectedSampleList.otu_labels.slice(0,10).reverse(),
+                        name: "OTUs",
+                        type: "bar",
+                        orientation: "h",
+                        width: 0.8
+                    }];
+                    
+                    // Data array
+                    //let data = [trace1];
+                    
+                    // Apply a title to the layout
+                    let layout = {
+                        title: "Top 10 OTUs ",
+                    };
+                    
+                    // Render the plot to the div tag with id "bar"
+                    Plotly.newPlot("bar", barData, layout);
+  
 
-  //Read the required data for the horizontal bar chrt
-//   let idValue = data.samples[0].id;
-//   let otu_idsValue = data.samples[0].otu_ids;
-  //console.log(otu_idsValue)
+            }
+        }
+
+     }
+
+
+
+  
+
+
   
   
   // Create the Bubble chart
