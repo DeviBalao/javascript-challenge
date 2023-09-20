@@ -7,16 +7,15 @@ const dataPromise = d3.json(url);
 var nameList = [];
 var metaDataList = [];
 var optionsData=[];
-//var selectedValue;
+
 
 //Fetch the JSON data and console log it
 //d3.json(url).then(function(data) {
-dataPromise.then(function(data) {
-  //console.log(data.names);
+dataPromise.then(function(data) {    
+    //console.log(data.names);
    nameList = data.names
   //console.log(nameList);
-  //console.log(data.samples[0].id);
-
+  
 // Store the valus and text for dropdown in a list of dictionaries
   optionsData = nameList.map(function(item)
   {
@@ -24,7 +23,6 @@ dataPromise.then(function(data) {
   });
   //console.log(optionsData)
   
-
   // Load the dropdown with list of ids from name list
   var selectTag = d3.select("select");
   var options = selectTag.selectAll('option').data(optionsData);
@@ -38,8 +36,13 @@ dataPromise.then(function(data) {
         return d.text;
       });
 
-    // Call updateData() when a change takes place to the DOM
+      //Initialize the metadata and charts
+
+
+
+    // Call updateData() when ID is changed
      d3.selectAll("#selDataset").on("change", updateData);
+
      function updateData()
      {
         let dropdownMenu = d3.select("#selDataset");
@@ -106,27 +109,48 @@ dataPromise.then(function(data) {
                     
                     // Apply a title to the layout
                     let layout = {
-                        title: "Top 10 OTUs ",
+                        title: "Top 10 OTUs ",                      
+                        margin: {
+                            l: 100,
+                            r: 100,
+                            t: 100,
+                            b: 100
+                          }
                     };
                     
                     // Render the plot to the div tag with id "bar"
                     Plotly.newPlot("bar", barData, layout);
-  
+
+                    // Create the Bubble chart
+                    //Data for Bubble chart
+                    let trace1 = {
+                        x: selectedSampleList.otu_ids,
+                        y: selectedSampleList.sample_values,
+                        text: selectedSampleList.otu_labels,
+                        mode: 'markers',
+                        marker: {
+                          color: selectedSampleList.otu_ids,
+                          size: selectedSampleList.sample_values
+                        }
+                      };
+                      
+                      let bubbleData = [trace1];
+                      
+                      let bubbleLayout = {
+                        title: 'Bubble Chart',
+                        xaxis: { title:
+                                    { text: "OTU ID"}},
+                        showlegend: false,
+                        height: 500,
+                        width: 800
+                      };
+                      
+                      Plotly.newPlot('bubble', bubbleData, bubbleLayout);  
 
             }
         }
-
-     }
-
-
-
+     }  
   
-
-
-  
-  
-  // Create the Bubble chart
-
 });
 
 
