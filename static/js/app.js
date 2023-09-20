@@ -36,9 +36,10 @@ dataPromise.then(function(data) {
         return d.text;
       });
 
-      //Initialize the metadata and charts
-
-
+      //Initialize the metadata and charts with default
+      //console.log("Default " + optionsData[0].text )
+      loadMetadata(optionsData[0].value);
+      plotCharts(optionsData[0].value);
 
     // Call updateData() when ID is changed
      d3.selectAll("#selDataset").on("change", updateData);
@@ -50,7 +51,7 @@ dataPromise.then(function(data) {
         let selectedId = dropdownMenu.property("value");
         console.log(selectedId);
         loadMetadata(selectedId);
-        plotBarchart(selectedId);
+        plotCharts(selectedId);
      }
 
     //Read and load the metadata for selected individual
@@ -77,7 +78,7 @@ dataPromise.then(function(data) {
      }
 
     // Create the horizontal bar chart for selected individual - may be a function
-     function plotBarchart(selectedValue)
+     function plotCharts(selectedValue)
      {
         //Read the required data for the horizontal barchart
         let sampleList = data.samples;
@@ -91,7 +92,7 @@ dataPromise.then(function(data) {
                 //let sample_values = selectedSampleList.sample_values.slice(0,10).reverse();
                 //let otu_labels = selectedSampleList.otu_labels.slice(0,10).reverse();
                 let otu_ids = selectedSampleList.otu_ids.map(item=> "OTU " + item)                
-                 console.log(otu_ids);
+                // console.log(otu_ids);
 
                 // Data for Bar Graph
                     let barData = [{
@@ -109,7 +110,7 @@ dataPromise.then(function(data) {
                     
                     // Apply a title to the layout
                     let layout = {
-                        title: "Top 10 OTUs ",                      
+                        title: "Top 10 OTUs for " + selectedValue.toString(),                      
                         margin: {
                             l: 100,
                             r: 100,
@@ -137,7 +138,7 @@ dataPromise.then(function(data) {
                       let bubbleData = [trace1];
                       
                       let bubbleLayout = {
-                        title: 'Bubble Chart',
+                        title: 'Bubble Chart for '+ selectedValue.toString(),
                         xaxis: { title:
                                     { text: "OTU ID"}},
                         showlegend: false,
