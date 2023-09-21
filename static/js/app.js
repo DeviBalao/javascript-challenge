@@ -2,7 +2,6 @@
 const url = "https://2u-data-curriculum-team.s3.amazonaws.com/dataviz-classroom/v1.1/14-Interactive-Web-Visualizations/02-Homework/samples.json";
 // Promise Pending
 const dataPromise = d3.json(url);
-//console.log("Data Promise: ", dataPromise);
 
 var nameList = [];
 var metaDataList = [];
@@ -11,18 +10,15 @@ var optionsData=[];
 
 //Fetch the JSON data and console log it
 //d3.json(url).then(function(data) {
-dataPromise.then(function(data) {    
-    //console.log(data.names);
-   nameList = data.names
-  //console.log(nameList);
+dataPromise.then(function(data) {        
+   nameList = data.names  
   
 // Store the valus and text for dropdown in a list of dictionaries
   optionsData = nameList.map(function(item)
   {
     return {'value':parseInt(item),'text': item }
   });
-  //console.log(optionsData)
-  
+    
   // Load the dropdown with list of ids from name list
   var selectTag = d3.select("select");
   var options = selectTag.selectAll('option').data(optionsData);
@@ -36,8 +32,7 @@ dataPromise.then(function(data) {
         return d.text;
       });
 
-      //Initialize the metadata and charts with default
-      //console.log("Default " + optionsData[0].text )
+      //Initialize the metadata and charts with default      
       loadMetadata(optionsData[0].value);
       plotCharts(optionsData[0].value);
 
@@ -64,14 +59,11 @@ dataPromise.then(function(data) {
             // Compare the selected name id with the metadata 
             if(metaDataList[cnt].id == selectedValue)
             {
-                // Display the results in Demographic Info section
-                //console.log(metaDataList[cnt])                
+                // Display the results in Demographic Info section                          
                 let selectedMetadata = metaDataList[cnt]
-                Object.keys(selectedMetadata).forEach(function(key) {
-                    //console.log(key + ":" + selectedMetadata[key]);                    
+                Object.keys(selectedMetadata).forEach(function(key) {                    
                     metaDataText = metaDataText + key + ":" + selectedMetadata[key] + "\n "                    
-                 });
-                 //console.log(metaDataText)                
+                 });                                
                 d3.select("#sample-metadata").text(metaDataText);               
             }            
         }                
@@ -81,18 +73,14 @@ dataPromise.then(function(data) {
      function plotCharts(selectedValue)
      {
         //Read the required data for the horizontal barchart
-        let sampleList = data.samples;
-        //console.log(sampleList);
+        let sampleList = data.samples;        
         for (let s =0; s < sampleList.length; s++ )
         {
             if(sampleList[s].id == selectedValue )
             {
                 //console.log(sampleList[s]);
-                let selectedSampleList = sampleList[s];
-                //let sample_values = selectedSampleList.sample_values.slice(0,10).reverse();
-                //let otu_labels = selectedSampleList.otu_labels.slice(0,10).reverse();
-                let otu_ids = selectedSampleList.otu_ids.map(item=> "OTU " + item)                
-                // console.log(otu_ids);
+                let selectedSampleList = sampleList[s];                
+                let otu_ids = selectedSampleList.otu_ids.map(item=> "OTU " + item)                                
 
                 // Data for Bar Graph
                     let barData = [{
