@@ -9,7 +9,7 @@ var optionsData=[];
 
 
 //Fetch the JSON data and console log it
-//d3.json(url).then(function(data) {
+
 dataPromise.then(function(data) {        
    nameList = data.names  
   
