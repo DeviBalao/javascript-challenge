@@ -131,7 +131,8 @@ dataPromise.then(function(data) {
                         mode: 'markers',
                         marker: {
                           color: selectedSampleList.otu_ids,
-                          size: selectedSampleList.sample_values
+                          size: selectedSampleList.sample_values,
+                          opacity: 0.5,
                         }
                       };
                       
@@ -142,8 +143,8 @@ dataPromise.then(function(data) {
                         xaxis: { title:
                                     { text: "OTU ID"}},
                         showlegend: false,
-                        height: 500,
-                        width: 800
+                        height: 700,
+                        width: 1000
                       };
                       
                       Plotly.newPlot('bubble', bubbleData, bubbleLayout);  
